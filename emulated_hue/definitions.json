@@ -1,7 +1,7 @@
 {
   "bridge": {
     "basic": {
-      "datastoreversion": "113",
+      "datastoreversion": "126",
       "swversion": "1956046040",
       "apiversion": "1.48.0",
       "modelid": "BSB002",
@@ -16,21 +16,21 @@
       },
       "dhcp": true,
       "internetservices": {
-        "internet": "connected",
-        "remoteaccess": "connected",
-        "swupdate": "connected",
-        "time": "connected"
+        "internet": "disconnected",
+        "remoteaccess": "disconnected",
+        "swupdate": "disconnected",
+        "time": "disconnected"
       },
       "netmask": "255.255.255.0",
       "proxyaddress": "none",
       "proxyport": 0,
-      "portalconnection": "connected",
+      "portalconnection": "disconnected",
       "portalservices": true,
       "portalstate": {
         "communication": "disconnected",
         "incoming": false,
         "outgoing": false,
-        "signedon": true
+        "signedon": false
       },
       "swupdate": {
         "updatestate": 0,
@@ -51,7 +51,7 @@
           "state": "noupdates",
           "lastinstall": "2020-12-02T05:41:17"
         },
-        "state": "noupdates",
+        "state": "unknown",
         "autoinstall": {
           "updatetime": "T06:00:00",
           "on": true
