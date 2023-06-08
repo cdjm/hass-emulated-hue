@@ -7,13 +7,13 @@ import json
 import logging
 import os
 import re
-from typing import TYPE_CHECKING, Any, AsyncGenerator, cast
+from collections.abc import AsyncGenerator
+from typing import TYPE_CHECKING, Any, cast
 
 import tzlocal
 from aiohttp import web
 
-import emulated_hue.const as const
-from emulated_hue import controllers
+from emulated_hue import const, controllers
 from emulated_hue.controllers import Controller
 from emulated_hue.controllers.devices import async_get_device
 from emulated_hue.utils import (
@@ -450,7 +450,7 @@ class HueApiV1Endpoints:
             "scenes", default={}
         )
         scenes = copy.deepcopy(scenes)
-        for scene_num, scene_data in scenes.items():
+        for _scene_num, scene_data in scenes.items():
             scenes_group = scene_data["group"]
             # Remove lightstates only if existing
             scene_data.pop("lightstates", None)
@@ -635,10 +635,13 @@ class HueApiV1Endpoints:
             if color_temp := request_data.get(const.HUE_ATTR_CT):
                 call.set_color_temperature(color_temp)
 
-            if xy := request_data.get(const.HUE_ATTR_XY):
-                if type(xy) is list and len(xy) == 2:
-                    with contextlib.suppress(AttributeError):
-                        call.set_xy(xy[0], xy[1])
+            if (
+                (xy := request_data.get(const.HUE_ATTR_XY))
+                and type(xy) is list
+                and len(xy) == 2
+            ):
+                with contextlib.suppress(AttributeError):
+                    call.set_xy(xy[0], xy[1])
 
             # effects probably don't work
             if effect := request_data.get(const.HUE_ATTR_EFFECT):
@@ -776,12 +779,12 @@ class HueApiV1Endpoints:
             splitmodel = re.match(r'(.*)\((.*)\)$',device.device_properties.model)
             retval["modelid"] = splitmodel[2]
             retval["productname"] = splitmodel[1]
-        else: 
+        else:
             retval["modelid"] = device.device_properties.model or retval["modelid"]
             retval["productname"] = device.device_properties.name or retval["productname"]
 
         # FIXME: Hack to make Hue gen2 bulbs appear as correct model id.
-        if retval["modelid"]=="9290012573A": 
+        if retval["modelid"]=="9290012573A":
             retval["modelid"]="LCT007"
 
         return retval
@@ -916,7 +919,7 @@ class HueApiV1Endpoints:
             "users", default={}
         )
         whitelist = copy.deepcopy(whitelist)
-        for username, data in whitelist.items():
+        for _username, data in whitelist.items():
             del data["username"]
             del data["clientkey"]
         return whitelist
